@@ -9,10 +9,14 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <link href="//cdn.muicss.com/mui-0.9.3/css/mui.min.css" rel="stylesheet" type="text/css" />
     <script src="//cdn.muicss.com/mui-0.9.3/js/mui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         #app {
             padding: 8%;
+        }
+        .contract {
+            padding: 8%
         }
         form {
             display: flex;
@@ -34,10 +38,14 @@
 
 <script>
     var g = {steps:undefined, goal:undefined, date: (new Date()).toISOString().split('.')[0], bet:undefined, friend:undefined }
+    Vue.filter('date', function (date, locale) {
+        moment.locale(locale)
+        return moment(date).format('LL')
+    })
     Vue.component('home', {
         template: `
         <div class="home">
-          <h1>Steps to date: <span >{{(g.steps === undefined) ? '...' : g.steps}}</span></h1>
+          <h3>Steps to date: <span >{{(g.steps === undefined) ? '...' : g.steps}}</span></h3>
           <form action="#" v-if="g.steps !== undefined">
             <div class="mui-textfield">
                 <input type="number" placeholder="Goal" v-model="g.goal" step="100">
@@ -66,7 +74,7 @@
               </ul>
             </div>
             </div>
-            <button class="mui-btn mui-btn--danger">Upload contract</button>
+            <button :disabled="!validateG" class="mui-btn mui-btn--danger" @click.prevent="$parent.page = 'contract'">Upload contract...</button>
           </form>
         </div>
         `,
@@ -86,7 +94,31 @@
         computed: {
             token () {
                 return this.$parent.findGetParameter('access_token')
+            },
+            validateG () {
+                return g.goal && g.date && g.bet && g.friend
             }
+        }
+    })
+    Vue.component('contract', {
+        template: `
+        <div class="contract">
+            <article id="contract">
+                <h3>The Personal Contract</h3>
+                <div>
+                    <p>
+                        I promise to walk/run <strong>{{g.goal}}</strong> steps
+                        on <strong>{{g.date | date('en') }}</strong> or
+                        I will lose <strong>{{g.bet}}</strong> ETH
+                        to <strong>{{g.friend}}</strong>
+                    </p>
+                    <button class="mui-btn mui-btn--danger">Sign</button>
+                </div>
+            </article>
+        </div>
+        `,
+        data () {
+            return {g}
         }
     })
     new Vue({
