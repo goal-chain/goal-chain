@@ -2,9 +2,9 @@ pragma solidity ^0.4.4;
 
 contract Goal {
   enum State {Active, Achieved, Failed, Closed}
-  State state;
+  State public state;
   address public ownerAddress;
-  uint public currentSteps;
+  uint public initialSteps;
   uint public goalSteps;
   uint public completionDate;
   uint public amount;
@@ -22,15 +22,11 @@ contract Goal {
     payoutAddress = _payoutAddress;
   }
 
-  // oraclize schedler setup
-  
-
-function updateSteps(uint currentSteps){
-  uint stepsDone = 
-}
- // updateSteps(latesSteps)
-  // if (latestSteps > currentSteps + goalSteps)
-   // // check date
-    //// // achived
-    /// else failed
+  function updateSteps(uint currentSteps) {
+    if (state == State.Active && (currentSteps >= initialSteps + goalSteps) && now < completionDate) {
+      state = State.Achieved;
+    } else if (state == State.Active && (currentSteps < initialSteps + goalSteps) && now >= completionDate) {
+      state = State.Failed;
+    }
+  }
 }

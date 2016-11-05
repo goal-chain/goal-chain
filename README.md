@@ -13,9 +13,25 @@ truffle serve
 ```
 
 <!--
-var factory = GoalFactory.deployed()
-factory.createGoal('asdfs',123,23,23,23,43,{from: '0x4327c69A1bED9f295b22e7A5D56581d32299a419', gas: 2000000}).then(console.log)
-factory.goals('0x4327c69A1bED9f295b22e7A5D56581d32299a419').then(console.log)
-var goal = Goal.at('0xd0e971663effee8896e5e55e0c59d79f515ecc36')
-goal.amount().then(console.log)
+
+function createGoalAndRetrieve(amount) {
+  const metaMaskAccount = '0xcd39209f0BcBC6199779049eb8b0b961B3D885aB';
+  var factory = GoalFactory.deployed();
+  factory.createGoal('test1',1,1,1,amount,2,{from:metaMaskAccount , gas: 2000000})
+    .then(() => factory.goals(metaMaskAccount))
+    .then((goalAddress) => {
+     const goal = Goal.at(goalAddress);
+     return goal.amount()
+    }).then(console.log)
+}
+
+goal.updateSteps(100, {from: accounts[0], gas: 2000000}).then(() => console.log('success'))
+
+// best practice
+goal.updateSteps.call(100, {from: accounts[0], gas: 2000000})
+  .then(() => goal.updateSteps(100, {from: accounts[0], gas: 2000000}))
+  .then(() => console.log('success'))
+  .catch(() => console.log('error'))
+
+goal.state().then(console.log)
 -->

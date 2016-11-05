@@ -1,38 +1,20 @@
-var accounts;
-var account;
+let accounts;
+let account;
 
-function setStatus(message) {
-  var status = document.getElementById("status");
-  status.innerHTML = message;
-};
+const createGoalAndRetrieve = (accessToken, currentSteps, initialSteps, goalSteps, completionDate, amount, payoutAddress) => {
+  const metaMaskAccount = '0xcd39209f0BcBC6199779049eb8b0b961B3D885aB';
+  const MAX_GAS_LIMIT = 2000000
+  let factory = GoalFactory.deployed();
 
-function refreshBalance() {
-  var meta = MetaCoin.deployed();
-
-  meta.getBalance.call(account, {from: account}).then(function(value) {
-    var balance_element = document.getElementById("balance");
-    balance_element.innerHTML = value.valueOf();
-  }).catch(function(e) {
-    console.log(e);
-    setStatus("Error getting balance; see log.");
-  });
-};
-
-function sendCoin() {
-  var meta = MetaCoin.deployed();
-
-  var amount = parseInt(document.getElementById("amount").value);
-  var receiver = document.getElementById("receiver").value;
-
-  setStatus("Initiating transaction... (please wait)");
-
-  meta.sendCoin(receiver, amount, {from: account}).then(function() {
-    setStatus("Transaction complete!");
-    refreshBalance();
-  }).catch(function(e) {
-    console.log(e);
-    setStatus("Error sending coin; see log.");
-  });
+  factory.createGoal(accessToken, currentSteps, initialSteps, goalSteps, completionDate, amount, payoutAddress,
+    { from: metaMaskAccount, gas: MAX_GAS_LIMIT })
+    .then(() => factory.goals(metaMaskAccount))
+    .then((goalAddress) => {
+      const goal = Goal.at(goalAddress);
+      console.log(`goalAddress=${goalAddress}|state=${goal.state().then(console.log)}`)
+      return goal;
+    })
+    .catch(console.error)
 };
 
 window.onload = function() {
@@ -51,3 +33,5 @@ window.onload = function() {
     account = accounts[0];
   });
 }
+
+window.createGoalAndRetrieve = createGoalAndRetrieve;
