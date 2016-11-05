@@ -3,7 +3,7 @@ pragma solidity ^0.4.4;
 import 'Escrow.sol';
 
 contract Goal {
-  enum State {Active, Achieved, Failed, Closed}
+  enum State {Active, Achieved, Failed}
   State public state;
   address public ownerAddress;
   uint public initialSteps;
@@ -33,14 +33,14 @@ contract Goal {
     return progress;
   }
 
-
   function updateSteps(uint _currentSteps) {
     currentSteps = _currentSteps;
     if (state == State.Active && (currentSteps >= initialSteps + goalSteps) && now < completionDate) {
       state = State.Achieved;
+      escrow.cancel(); // I receive my money back!
     } else if (state == State.Active && (currentSteps < initialSteps + goalSteps) && now >= completionDate) {
       state = State.Failed;
+      escrow.release(); // I send the money to the payoutAddress
     }
-
   }
 }
