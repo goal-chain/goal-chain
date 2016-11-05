@@ -27,8 +27,10 @@ contract Goal {
     escrow = new Escrow(_ownerAddress, _payoutAddress);
   }
 
-  function checkProgress(){
-    //uint8 progress = 
+  // Checks the % of progress in the goal commitment 
+  function checkProgress() returns (uint8){
+    uint8 progress = (uint8)((currentSteps - initialSteps)/goalSteps) * 100;
+    return progress;
   }
 
 
