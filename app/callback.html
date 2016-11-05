@@ -1,1 +1,74 @@
-woo
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MetaCoin - Default Truffle App</title>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href="./app.css" rel='stylesheet' type='text/css'>
+    <script src="./app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.5/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        div {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <component :is="page"></component>
+</div>
+
+<script>
+    var g = {steps:undefined}
+    Vue.component('home', {
+        template: `
+        <div class="home">
+          <h1>Steps to date: <span >{{(g.steps === undefined) ? '...' : g.steps}}</span></h1>
+        </div>
+        `,
+        data () {
+            return {g}
+        },
+        mounted () {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.token;
+            axios.get('https://api.fitbit.com/1/user/-/activities/date/2016-11-06.json', {})
+                    .then(function (response) {
+                        this.g.steps = response.data.summary.steps
+                    })
+                    .catch(function (error) {
+                        this.g.steps = 'epic error :('
+                    });
+        },
+        computed: {
+            token () {
+                return this.$parent.findGetParameter('access_token')
+            }
+        }
+    })
+    new Vue({
+        el: '#app',
+        data: {
+            page: 'home',
+            fitLogged: true,
+            g
+        },
+        methods: {
+            findGetParameter (parameterName) {
+                var result = null,
+                        tmp = [];
+                location.hash
+                        .substr(1)
+                        .split("&")
+                        .forEach(function (item) {
+                            tmp = item.split("=");
+                            if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+                        });
+                return result
+            }
+        }
+    })
+</script>
+</body>
+</html>
