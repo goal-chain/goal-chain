@@ -151,14 +151,17 @@
                         eternal shame, as this is irreversible.
                         The Internet never forgets.
                     </p>
-                    <img src="http://img12.deviantart.net/8b7c/i/2013/055/3/0/wax_seal_a_by_shinraxtensei-d5w3qe6.png" id="seal">
-                    <button id="sign" v-on:click="createGoal">Sign</button>
+                    <img src="http://img12.deviantart.net/8b7c/i/2013/055/3/0/wax_seal_a_by_shinraxtensei-d5w3qe6.png" id="seal" v-show="waxSeal">
+                    <button id="sign" v-on:click="createGoal" v-show="!waxSeal">Sign</button>
                 </div>
             </article>
         </div>
         `,
         data () {
-            return {g}
+            return {
+              waxSeal: false,
+              g
+            }
         },
         methods: {
           createGoal: () => {
@@ -172,8 +175,10 @@
                 { from: metaMaskAccount, gas: MAX_GAS_LIMIT })
                 .then(() => factory.goals(metaMaskAccount))
                 .then((goalAddress) => {
+                  // TODO ??
+                  this.waxSeal = true
                   const goal = Goal.at(goalAddress);
-                  console.log(`goalAddress=${goalAddress}|state=${goal.state().then(console.log)}`)
+                  console.log(`goalAddress=${goalAddress}`)
                   return goal;
                 })
                 .catch(console.error)
