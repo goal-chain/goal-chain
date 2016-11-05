@@ -1,49 +1,12 @@
-// <ORACLIZE_API>
-/*
-Copyright (c) 2015-2016 Oraclize SRL
-Copyright (c) 2016 Oraclize LTD
+pragma solidity ^0.4.0;
+import 'OraclizeI.sol';
+import 'OraclizeAddrResolverI.sol';
 
 
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-*/
-
-contract OraclizeI {
-    address public cbAddress;
-    function query(uint _timestamp, string _datasource, string _arg) returns (bytes32 _id);
-    function query_withGasLimit(uint _timestamp, string _datasource, string _arg, uint _gaslimit) returns (bytes32 _id);
-    function query2(uint _timestamp, string _datasource, string _arg1, string _arg2) returns (bytes32 _id);
-    function query2_withGasLimit(uint _timestamp, string _datasource, string _arg1, string _arg2, uint _gaslimit) returns (bytes32 _id);
-    function getPrice(string _datasource) returns (uint _dsprice);
-    function getPrice(string _datasource, uint gaslimit) returns (uint _dsprice);
-    function useCoupon(string _coupon);
-    function setProofType(byte _proofType);
-    function setCustomGasPrice(uint _gasPrice);
-}
-contract OraclizeAddrResolverI {
-    function getAddress() returns (address _addr);
-}
 contract usingOraclize {
+
+
+
     uint constant day = 60*60*24;
     uint constant week = 60*60*24*7;
     uint constant month = 60*60*24*30;
@@ -57,17 +20,18 @@ contract usingOraclize {
     uint8 constant networkID_consensys = 161;
 
     OraclizeAddrResolverI OAR;
-    
+
     OraclizeI oraclize;
+
     modifier oraclizeAPI {
         if(address(OAR)==0) oraclize_setNetwork(networkID_auto);
         oraclize = OraclizeI(OAR.getAddress());
-        _
-    }//please import oraclizeAPI_0.4.sol when solidity >= 0.4.0
+        _;
+    }
     modifier coupon(string code){
         oraclize = OraclizeI(OAR.getAddress());
         oraclize.useCoupon(code);
-        _
+        _;
     }
 
     function oraclize_setNetwork(uint8 networkID) internal returns(bool){
@@ -89,7 +53,7 @@ contract usingOraclize {
         }
         return false;
     }
-    
+
     function oraclize_query(string datasource, string arg) oraclizeAPI internal returns (bytes32 id){
         uint price = oraclize.getPrice(datasource);
         if (price > 1 ether + tx.gasprice*200000) return 0; // unexpectedly high price
@@ -138,7 +102,7 @@ contract usingOraclize {
     }
     function oraclize_setCustomGasPrice(uint gasPrice) oraclizeAPI internal {
         return oraclize.setCustomGasPrice(gasPrice);
-    }    
+    }
     function oraclize_setConfig(bytes config) oraclizeAPI internal {
         //return oraclize.setConfig(config);
     }
@@ -185,16 +149,16 @@ contract usingOraclize {
             return 1;
         else
             return 0;
-   } 
+   }
 
     function indexOf(string _haystack, string _needle) internal returns (int)
     {
         bytes memory h = bytes(_haystack);
         bytes memory n = bytes(_needle);
-        if(h.length < 1 || n.length < 1 || (n.length > h.length)) 
+        if(h.length < 1 || n.length < 1 || (n.length > h.length))
             return -1;
         else if(h.length > (2**128 -1))
-            return -1;                                  
+            return -1;
         else
         {
             uint subindex = 0;
@@ -206,13 +170,13 @@ contract usingOraclize {
                     while(subindex < n.length && (i + subindex) < h.length && h[i + subindex] == n[subindex])
                     {
                         subindex++;
-                    }   
+                    }
                     if(subindex == n.length)
                         return int(i);
                 }
             }
             return -1;
-        }   
+        }
     }
 
     function strConcat(string _a, string _b, string _c, string _d, string _e) internal returns (string){
@@ -231,7 +195,7 @@ contract usingOraclize {
         for (i = 0; i < _be.length; i++) babcde[k++] = _be[i];
         return string(babcde);
     }
-    
+
     function strConcat(string _a, string _b, string _c, string _d) internal returns (string) {
         return strConcat(_a, _b, _c, _d, "");
     }
@@ -267,7 +231,7 @@ contract usingOraclize {
         if (_b > 0) mint *= 10**_b;
         return mint;
     }
-    
+
 
 }
 // </ORACLIZE_API>
