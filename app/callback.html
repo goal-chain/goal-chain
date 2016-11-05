@@ -45,7 +45,8 @@
     Vue.component('home', {
         template: `
         <div class="home">
-          <h3>Steps to date: <span >{{(g.steps === undefined) ? '...' : g.steps}}</span></h3>
+          <!--h3>Steps to date: <span >{{(g.steps === undefined) ? '...' : g.steps}}</span></h3-->
+          <h2>Place your Bet</h2>
           <form action="#" v-if="g.steps !== undefined">
             <div class="mui-textfield">
                 <input type="number" placeholder="Goal" v-model="g.goal" step="100">
