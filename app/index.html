@@ -4,13 +4,46 @@
   <title>MetaCoin - Default Truffle App</title>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
   <link href="./app.css" rel='stylesheet' type='text/css'>
-  <link href="https://unpkg.com/mint-ui/lib/style.css" rel='stylesheet' type='text/css'>
   <script src="./app.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.5/vue.js"></script>
-  <script src="https://unpkg.com/mint-ui/lib/index.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.24/vue.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    div {
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
 </head>
 <body>
-  <h1>Fitbit</h1>
-  <button>Login</button>
+  <div id="app">
+    <component :is="page"></component>
+  </div>
+
+  <script>
+    Vue.component('home', {
+      template: `
+        <div class="home">
+          <h1>Fitbit</h1>
+          <a href="https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=227XJ3&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fcallback.html&scope=activity&expires_in=604800" class="button">Login</a>
+          <button v-if="fitLogged" @click="$parent.page = 'goal'">Goals</button>
+        </div>
+      `
+    })
+    Vue.component('goal', {
+      template: `
+      <div class="goal">
+        <button @click="$parent.page = 'home'">&lt;</button>
+        <p>Hello my world</p>
+      </div>
+      `
+    })
+    new Vue({
+      el: '#app',
+      data: {
+        page: 'home',
+        fitLogged: false
+      }
+    })
+  </script>
 </body>
 </html>
