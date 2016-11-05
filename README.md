@@ -12,6 +12,8 @@ truffle migrate --reset
 truffle serve
 ```
 
+testrpc --account="0x6fcbe0b5488bd88a840031e006cc39acfe61cc78639cf9f343aa1f1f23b26762,9999999999999999999999999999999999"
+
 <!--
 
 function createGoalAndRetrieve(amount) {

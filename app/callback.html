@@ -109,16 +109,22 @@
             return {g}
         },
         mounted () {
+            this.g.token = this.token
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.token;
             axios.get('https://api.fitbit.com/1/user/-/activities/date/2016-11-05.json', {})
-                    .then(function (response) {
-                        this.g.steps = response.data.summary.steps
-
-                        this.g.token = this.token
-                    })
-                    .catch(function (error) {
-                        this.g.steps = 'epic error :('
+                .then(function (response) {
+                    this.g.steps = response.data.summary.steps
+                })
+                .then(() => {
+                    web3.eth.getAccounts(function(error, accounts) {
+                        if (error == null && accounts.length > 0) {
+                            this.g.account = accounts[0]
+                        }
                     });
+                })
+                .catch(function (error) {
+                    this.g.steps = 'epic error :('
+                });
         },
         computed: {
             token () {
@@ -156,16 +162,13 @@
         },
         methods: {
           createGoal: () => {
-            //{"steps":170,"goal":200,"date":"2016-11-05T17:41:48","bet":2,"friend":"UNICEF"}
-            console.log(JSON.stringify(this.g))
-            console.log(this.g.date)
 
-            const createGoalAndRetrieve = (accessToken, currentSteps, initialSteps, goalSteps, completionDate, amount, payoutAddress) => {
-              const metaMaskAccount = '0xcd39209f0BcBC6199779049eb8b0b961B3D885aB';
+            const createGoalAndRetrieve = (accessToken, currentSteps, goalSteps, completionDate, amount, payoutAddress) => {
+              const metaMaskAccount = this.g.account;
               const MAX_GAS_LIMIT = 2000000
               let factory = GoalFactory.deployed();
 
-              factory.createGoal(accessToken, currentSteps, initialSteps, goalSteps, completionDate, amount, payoutAddress,
+              factory.createGoal(accessToken, currentSteps, goalSteps, completionDate, amount, payoutAddress,
                 { from: metaMaskAccount, gas: MAX_GAS_LIMIT })
                 .then(() => factory.goals(metaMaskAccount))
                 .then((goalAddress) => {
@@ -175,6 +178,19 @@
                 })
                 .catch(console.error)
             };
+
+            const timeInSeconds = moment(this.g.date).format('x') / 1000
+
+            console.log(JSON.stringify(this.g))
+            createGoalAndRetrieve(
+              this.g.token,
+              this.g.steps,
+              this.g.goal,
+              timeInSeconds,
+              this.g.bet,
+              // TODO fixed address
+              '0x00219e9bff127d11da668ca92c0598c77e9f3e51'
+            )
           }
         }
     })
