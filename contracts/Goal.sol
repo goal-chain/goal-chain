@@ -1,7 +1,9 @@
 pragma solidity ^0.4.4;
 
 contract Goal {
-  address public owner;
+  enum State {Active, Achieved, Failed, Closed}
+  State state;
+  address public ownerAddress;
   uint public currentSteps;
   uint public goalSteps;
   uint public completionDate;
@@ -9,8 +11,9 @@ contract Goal {
   string public accessToken;
   address public payoutAddress;
 
-  function createGoal(string _accessToken, uint _currentSteps, uint _goalSteps, uint _completionDate, uint _amount, address _payoutAddress) {
-    owner = msg.sender;
+  function Goal(address _ownerAddress, string _accessToken, uint _currentSteps, uint _goalSteps, uint _completionDate, uint _amount, address _payoutAddress) {
+    state = State.Active;
+    ownerAddress = _ownerAddress;
     accessToken = _accessToken;
     currentSteps = _currentSteps;
     goalSteps = _goalSteps;
@@ -18,4 +21,13 @@ contract Goal {
     amount = _amount;
     payoutAddress = _payoutAddress;
   }
+
+  // oraclize schedler setup
+
+
+ // updateSteps(latesSteps)
+  // if (latestSteps > currentSteps + goalSteps)
+   // // check date
+    //// // achived
+    /// else failed
 }
