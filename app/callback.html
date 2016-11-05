@@ -12,6 +12,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
+        #personalcontract {
+            text-align: center;
+            font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", Charcoal, "Helvetica Inserat", "Bitstream Vera Sans Bold", "Arial Black", "sans serif";
+        }
         #app {
             padding: 8%;
         }
@@ -28,6 +32,28 @@
         }
         .right {
             float: right;
+        }
+        strong {
+            font-size: 1.6em;
+        }
+        .contract {
+            font-family: cursive;
+            border-style: solid;
+            border-width: 12px;
+            border-color: burlywood;
+            background-color: antiquewhite;
+            padding-bottom: 63px;
+        }
+        #seal {
+            width: 300px;
+            position: absolute;
+            left: 120px;
+            top: 319px;
+        }
+        #sign {
+            border-radius: 30%;
+            font-size: 1.3em;
+            padding: 3px 18px;
         }
     </style>
 </head>
@@ -87,6 +113,7 @@
             axios.get('https://api.fitbit.com/1/user/-/activities/date/2016-11-05.json', {})
                     .then(function (response) {
                         this.g.steps = response.data.summary.steps
+
                         this.g.token = this.token
                     })
                     .catch(function (error) {
@@ -106,15 +133,20 @@
         template: `
         <div class="contract">
             <article id="contract">
-                <h3>The Personal Contract</h3>
+                <h3 id="personalcontract">Personal Contract</h3>
                 <div>
                     <p>
-                        I promise to walk/run <strong>{{g.goal}}</strong> steps
-                        on <strong>{{g.date | date('en') }}</strong> or
-                        I will lose <strong>{{g.bet}}</strong> ETH
-                        to <strong>{{g.friend}}</strong>
+                        I, <strong>Conor Fennell</strong> hereby sweare
+                        to go the distance of <strong>{{g.goal}}</strong> steps
+                        on <strong>{{g.date | date('en') }}</strong>. Should
+                        I fail in this challenge, the sum of
+                        <strong>{{g.bet}} ETH</strong> will be delivered to
+                        <strong>{{g.friend}}</strong>, and I will live in
+                        eternal shame, as this is irreversible.
+                        The Internet never forgets.
                     </p>
-                    <button class="mui-btn mui-btn--danger" v-on:click="createGoal">Sign</button>
+                    <img src="http://img12.deviantart.net/8b7c/i/2013/055/3/0/wax_seal_a_by_shinraxtensei-d5w3qe6.png" id="seal">
+                    <button id="sign" v-on:click="createGoal">Sign</button>
                 </div>
             </article>
         </div>
