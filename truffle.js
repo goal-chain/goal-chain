@@ -1,5 +1,6 @@
 module.exports = {
   build: {
+    "callback.html": "callback.html",
     "index.html": "index.html",
     "app.js": [
       "javascripts/app.js"
