@@ -125,7 +125,7 @@
           <h2>Build your Personal Contract</h2>
           <form action="#" v-if="g.steps !== undefined">
             <div class="mui-textfield">
-                <input type="number" placeholder="Goal" v-model="g.goal" step="100">
+                <input type="number" placeholder="Goal" v-model="g.goal" step="1">
                 <label>steps</label>
             </div>
             <div class="mui-textfield">
@@ -233,8 +233,7 @@
               factory.createGoal(accessToken, currentSteps, goalSteps, completionDate, amount, payoutAddress,{ from: metaMaskAccount ,gas: MAX_GAS_LIMIT })
                 .then(() => factory.goals(metaMaskAccount))
                 .then((goalAddress) => {
-                  // TODO ??
-                  this.waxSeal = true
+                  
                   const goal = Goal.at(goalAddress);
                   this.goalAddress = goalAddress
                   console.log(`goalAddress=${goalAddress}`)
@@ -242,7 +241,9 @@
                 }).then((goalAddress) => {
                   return Goal.at(goalAddress).escrow({ from: metaMaskAccount, value: web3.toWei(amount, 'ether') ,gas: MAX_GAS_LIMIT })
                 })
-                .then(console.log)
+                .then(() => {
+                    this.waxSeal = true;
+                })
                 .catch(console.error)
             };
 
