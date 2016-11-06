@@ -8,11 +8,27 @@ const axios = require('axios');
 GoalFactory.setProvider(provider);
 Goal.setProvider(provider);
 const goalFactory = GoalFactory.deployed(); 
+const metaMask = '0xcd39209f0BcBC6199779049eb8b0b961B3D885aB';
+const EMPTY = '0x0000000000000000000000000000000000000000';
 
-new CronJob('*/30 * * * * *', function() {
-  console.log('You will see this message every second');
-  axios.get('https://calm-reaches-82247.herokuapp.com/getsteps/eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyUU02TTkiLCJhdWQiOiIyMjdYR1oiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyYWN0IiwiZXhwIjoxNDc5MDM2MTMyLCJpYXQiOjE0Nzg0MzEzMzJ9.wn6Ff0G1I0H5vxFrTk7jw6g0p7glvb5WuXxmF1R1WzQ')
-    .then(result => console.log(result.data.steps));
+new CronJob('*/2 * * * * *', function() {
+  console.log('Oracle doing its stuff');
+
+  goalFactory.goals(metaMask)
+    .then((goalAddress) => {
+      if(goalAddress !== EMPTY) {
+        console.log('Contacting Fitbit');
+       return axios.get('https://calm-reaches-82247.herokuapp.com/getsteps/eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyUU02TTkiLCJhdWQiOiIyMjdYR1oiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyYWN0IiwiZXhwIjoxNDc5MDM2MTMyLCJpYXQiOjE0Nzg0MzEzMzJ9.wn6Ff0G1I0H5vxFrTk7jw6g0p7glvb5WuXxmF1R1WzQ')
+        .then((result) => {
+          console.log('Updating Goal contract');
+          const goal = Goal.at(goalAddress);
+          const oracle = '0x4ee914361cce1b654446a4faf8885d179a996e02';
+          return goal.__callback('undefined', result.data.steps, 'undefined' , { from: oracle, value: 1, gas: 1000000 });
+        }).then(console.log);
+      } else {
+        console.log('No Goal set, LAZY!!!');
+      } 
+    }).catch(console.log);
 
 }, null, true, 'America/Los_Angeles');
 
