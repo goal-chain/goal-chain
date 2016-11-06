@@ -59,9 +59,14 @@
     </style>
 </head>
 <body>
-<div id="app">
-    <component :is="page"></component>
+<div id="wrapper">
+    <div id="topbar"></div>
+    <div id="app">
+        <component :is="page"></component>
+    </div>
+    <div id="bottombar"></div>
 </div>
+
 
 <script>
     var g = {steps:undefined, goal:undefined, date: (new Date()).toISOString().split('.')[0], bet:undefined, friend:undefined, token:undefined }

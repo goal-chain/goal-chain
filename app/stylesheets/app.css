@@ -46,3 +46,15 @@ h3 {
 #balance {
   color: black;
 }
+div#wrapper {
+  top: 0;
+  bottom: 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+  background-color: rgb(62,77,100);
+}
+div#topbar {
+  height: 40px;
+  background-color: rgb(50, 63, 82);
+}
