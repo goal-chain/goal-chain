@@ -230,8 +230,7 @@
               const MAX_GAS_LIMIT = 2000000
               let factory = GoalFactory.deployed();
 
-              factory.createGoal(accessToken, currentSteps, goalSteps, completionDate, amount, payoutAddress,
-                { from: metaMaskAccount, gas: MAX_GAS_LIMIT })
+              factory.createGoal(accessToken, currentSteps, goalSteps, completionDate, amount, payoutAddress,{ from: metaMaskAccount ,gas: MAX_GAS_LIMIT })
                 .then(() => factory.goals(metaMaskAccount))
                 .then((goalAddress) => {
                   // TODO ??
@@ -239,8 +238,11 @@
                   const goal = Goal.at(goalAddress);
                   this.goalAddress = goalAddress
                   console.log(`goalAddress=${goalAddress}`)
-                  return goal;
+                  return goalAddress;
+                }).then((goalAddress) => {
+                  return Goal.at(goalAddress).escrow({ from: metaMaskAccount, value: web3.toWei(amount, 'ether') ,gas: MAX_GAS_LIMIT })
                 })
+                .then(console.log)
                 .catch(console.error)
             };
 

@@ -4,6 +4,9 @@ import 'Goal.sol';
 
 contract GoalFactory {
     mapping(address => address) public goals;
+    /*address[] public goalSetters;
+    mapping(address => uint) public goalSetterIndexPlusOne;
+    mapping(address => mapping(address => uint)) ownerGoalEscrow;*/
 
     function createGoal(string _accessToken, uint _currentSteps, uint _goalSteps, uint _completionDate, uint _amount, address _payoutAddress) {
         address owner = msg.sender;
