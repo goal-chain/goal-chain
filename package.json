@@ -1,0 +1,26 @@
+{
+  "name": "goal-chain",
+  "version": "1.0.0",
+  "description": "``` npm install -g ethereumjs-testrpc testrpc",
+  "main": "truffle.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goal-chain/goal-chain.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/goal-chain/goal-chain/issues"
+  },
+  "homepage": "https://github.com/goal-chain/goal-chain#readme",
+  "dependencies": {
+    "cron": "^1.1.1",
+    "web3": "^0.17.0-beta"
+  }
+}
