@@ -117,7 +117,7 @@
         mounted () {
             this.g.token = this.token
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.token;
-            axios.get('https://api.fitbit.com/1/user/-/activities/date/2016-11-05.json', {})
+            axios.get('https://api.fitbit.com/1/user/-/activities/date/2016-11-06.json', {})
                 .then(function (response) {
                     this.g.steps = response.data.summary.steps
                 })
