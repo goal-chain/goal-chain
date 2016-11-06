@@ -151,8 +151,8 @@
                         eternal shame, as this is irreversible.
                         The Internet never forgets.
                     </p>
-                    <img src="http://img12.deviantart.net/8b7c/i/2013/055/3/0/wax_seal_a_by_shinraxtensei-d5w3qe6.png" id="seal" v-show="waxSeal">
-                    <button id="sign" v-on:click="createGoal" v-show="!waxSeal">Sign</button>
+                    <img src="http://img12.deviantart.net/8b7c/i/2013/055/3/0/wax_seal_a_by_shinraxtensei-d5w3qe6.png" id="seal" v-if="waxSeal">
+                    <button id="sign" v-on:click="createGoal" v-if="!waxSeal">Sign</button>
                 </div>
             </article>
         </div>
