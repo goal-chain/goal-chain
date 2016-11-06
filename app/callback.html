@@ -113,7 +113,7 @@
 
 
 <script>
-    var g = {steps:undefined, goal:undefined, date: undefined, bet:undefined, friend:undefined, token:undefined }
+    var g = {steps:undefined, goal:undefined, date: (new Date()).toISOString().split('.')[0], bet:undefined, friend:undefined, token:undefined }
     Vue.filter('date', function (date, locale) {
         moment.locale(locale)
         return moment(date).format('LL')
@@ -130,7 +130,7 @@
             </div>
             <div class="mui-textfield">
                  <label>Deadline (local time): </label>
-                 <input type="date" v-model="g.date" step="1">
+                 <input type="datetime-local" v-model="g.date" step="1">
             </div>
             <div class="mui-textfield">
                 <input type="number" placeholder="Your bet on yourself" v-model="g.bet">
