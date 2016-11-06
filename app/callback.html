@@ -152,20 +152,21 @@
                         The Internet never forgets.
                     </p>
                     <img src="http://img12.deviantart.net/8b7c/i/2013/055/3/0/wax_seal_a_by_shinraxtensei-d5w3qe6.png" id="seal" v-if="waxSeal">
-                    <button id="sign" v-on:click="createGoal" v-if="!waxSeal">Sign</button>
+                    <button id="sign" v-on:click="createGoal" v-if="!contractSigned">Sign</button>
                 </div>
             </article>
         </div>
         `,
         data () {
             return {
-              waxSeal: false,
-              g
+                waxSeal: false,
+                contractSigned: false,
+                g
             }
         },
         methods: {
           createGoal () {
-
+            this.contractSigned = true
             const createGoalAndRetrieve = (accessToken, currentSteps, goalSteps, completionDate, amount, payoutAddress) => {
               const metaMaskAccount = this.g.account;
               const MAX_GAS_LIMIT = 2000000
