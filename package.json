@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/goal-chain/goal-chain#readme",
   "dependencies": {
+    "axios": "^0.15.2",
     "cron": "^1.1.1",
     "web3": "^0.17.0-beta"
   }
