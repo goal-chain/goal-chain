@@ -58,3 +58,18 @@ div#topbar {
   height: 40px;
   background-color: rgb(50, 63, 82);
 }
+img#fitlogo {
+  width: 375px;
+  height: 375px;
+}
+a.button {
+  width: 100%;
+  text-align: center;
+  font-size: 2em;
+  font-family: Helvetica, sans-serif;
+  color: white;
+  text-decoration: none;
+}
+button.mui-btn.mui-btn--primary {
+  background-color: rgb(20, 177, 185);
+}

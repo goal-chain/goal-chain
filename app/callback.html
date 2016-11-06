@@ -56,6 +56,45 @@
             font-size: 1.3em;
             padding: 3px 18px;
         }
+        #balance {
+            color: black;
+        }
+        div#wrapper {
+            top: 0;
+            bottom: 0;
+            position: absolute;
+            left: 0;
+            right: 0;
+            background-color: rgb(62,77,100);
+        }
+        div#topbar {
+            height: 40px;
+            background-color: rgb(50, 63, 82);
+        }
+        img#fitlogo {
+            width: 375px;
+            height: 375px;
+        }
+        a.button {
+            width: 100%;
+            text-align: center;
+            font-size: 2em;
+            font-family: Helvetica, sans-serif;
+            color: white;
+            text-decoration: none;
+        }
+        .home {
+            color: white;
+        }
+        .mui-textfield>label {
+            color: gainsboro;
+        }
+        .mui-textfield>input {
+            color: rgb(20, 177, 185);
+        }
+        button.mui-btn.mui-btn--primary {
+            background-color: rgb(20, 177, 185);
+        }
     </style>
 </head>
 <body>
@@ -78,7 +117,7 @@
         template: `
         <div class="home">
           <!--h3>Steps to date: <span >{{(g.steps === undefined) ? '...' : g.steps}}</span></h3-->
-          <h2>Place your Bet</h2>
+          <h2>Build your Personal Contract</h2>
           <form action="#" v-if="g.steps !== undefined">
             <div class="mui-textfield">
                 <input type="number" placeholder="Goal" v-model="g.goal" step="100">
@@ -93,10 +132,9 @@
                 <label>ETH</label>
             </div>
             <div id="friend">
-             <h3>Donate to {{g.friend}}</h3>
              <div class="mui-dropdown right">
               <button class="mui-btn mui-btn--primary" data-mui-toggle="dropdown">
-                Dropdown
+                Choose a friend
                 <span class="mui-caret"></span>
               </button>
               <ul class="mui-dropdown__menu mui-dropdown__menu--right">
@@ -107,6 +145,7 @@
               </ul>
             </div>
             </div>
+            <h3>Give to {{g.friend}}</h3>
             <button :disabled="!validateG" class="mui-btn mui-btn--primary" @click.prevent="$parent.page = 'contract'">Upload contract...</button>
           </form>
         </div>
@@ -155,7 +194,8 @@
                         <strong>{{g.bet}}&nbsp;ETH</strong> will be delivered to
                         <strong>{{g.friend}}</strong>, and I will live in
                         eternal shame, as this is irreversible.
-                        The Internet never forgets.
+                        The Internet never forgives.
+                        The Blockchain never forgets.
                     </p>
                     <img src="http://img12.deviantart.net/8b7c/i/2013/055/3/0/wax_seal_a_by_shinraxtensei-d5w3qe6.png" id="seal" v-if="waxSeal">
                     <button id="sign" v-on:click="createGoal" v-if="!contractSigned">Sign</button>
