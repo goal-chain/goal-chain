@@ -24,7 +24,7 @@ new CronJob('*/24 * * * * *', function() {
     .then((goalAddress) => {
       if(goalAddress !== EMPTY) {
         console.log('Contacting Fitbit');
-       return axios.get('https://calm-reaches-82247.herokuapp.com/getsteps/eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyUU02TTkiLCJhdWQiOiIyMjdYR1oiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyYWN0IiwiZXhwIjoxNDc5MDM2MTMyLCJpYXQiOjE0Nzg0MzEzMzJ9.wn6Ff0G1I0H5vxFrTk7jw6g0p7glvb5WuXxmF1R1WzQ')
+       return axios.get('https://calm-reaches-82247.herokuapp.com/getsteps/eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyUU02TTkiLCJhdWQiOiIyMjdYR1oiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyYWN0IiwiZXhwIjoxNDc5MDQ4NDYzLCJpYXQiOjE0Nzg0NDM2NjN9.NkaWkxWZ4C19p3o2qOsfCvPiZYlfWkx5Y7rfFAByKpo')
         .then((result) => {
           console.log('Updating Goal contract', result.data.steps);
           const goal = Goal.at(goalAddress);
