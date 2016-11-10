@@ -11,20 +11,34 @@ const goalFactory = GoalFactory.deployed();
 const metaMask = '0xcd39209f0BcBC6199779049eb8b0b961B3D885aB';
 const EMPTY = '0x0000000000000000000000000000000000000000';
 
-new CronJob('*/2 * * * * *', function() {
+const ContractState  = {
+  '0': 'Initial', 
+  '1': 'Active', 
+  '2': 'Achieved', 
+  '3': 'Failed'}
+
+new CronJob('*/24 * * * * *', function() {
   console.log('Oracle doing its stuff');
 
   goalFactory.goals(metaMask)
     .then((goalAddress) => {
       if(goalAddress !== EMPTY) {
         console.log('Contacting Fitbit');
-       return axios.get('https://calm-reaches-82247.herokuapp.com/getsteps/eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyUU02TTkiLCJhdWQiOiIyMjdYR1oiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyYWN0IiwiZXhwIjoxNDc5MDM2MTMyLCJpYXQiOjE0Nzg0MzEzMzJ9.wn6Ff0G1I0H5vxFrTk7jw6g0p7glvb5WuXxmF1R1WzQ')
+       return axios.get('https://calm-reaches-82247.herokuapp.com/getsteps/eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyUU02TTkiLCJhdWQiOiIyMjdYR1oiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyYWN0IiwiZXhwIjoxNDc5MDQ4NDYzLCJpYXQiOjE0Nzg0NDM2NjN9.NkaWkxWZ4C19p3o2qOsfCvPiZYlfWkx5Y7rfFAByKpo')
         .then((result) => {
-          console.log('Updating Goal contract');
+          console.log('Updating Goal contract', result.data.steps);
           const goal = Goal.at(goalAddress);
           const oracle = '0x4ee914361cce1b654446a4faf8885d179a996e02';
-          return goal.__callback('undefined', result.data.steps, 'undefined' , { from: oracle, value: 1, gas: 1000000 });
-        }).then(console.log);
+
+          return goal.__callback(0, result.data.steps, 0 , { from: oracle, gas: 1000000 });
+        })
+        .then(() => {
+          const goal = Goal.at(goalAddress);
+          return Promise.all([goal.currentSteps(), goal.state(), goal.initialSteps(), goal.goalSteps(), goal.completionDate()]);
+        })
+        .then((responses) => {
+          console.log(`State: ${ContractState[responses[1]]} , currentsteps: ${responses[0]}, initialSteps: ${responses[2]}, goalSteps: ${responses[3]}, completionDate: ${new Date(responses[4] * 1000)}}`)
+        });
       } else {
         console.log('No Goal set, LAZY!!!');
       } 

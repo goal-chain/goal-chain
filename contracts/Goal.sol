@@ -12,8 +12,7 @@ contract Goal {
   uint public amount;
   string public accessToken;
   address public payoutAddress;
-  uint private currentSteps;
-  // Escrow public escrow;
+  uint public currentSteps;
 
   function Goal(address _ownerAddress, string _accessToken, uint _initialSteps, uint _goalSteps, uint _completionDate, uint _amount, address _payoutAddress) {
     state = State.Initial;
@@ -24,11 +23,12 @@ contract Goal {
     completionDate = _completionDate;
     amount = _amount;
     payoutAddress = _payoutAddress;
-//    escrow = new Escrow(_ownerAddress, _payoutAddress);
+    // OAR = OraclizeAddrResolverI(0xb6b5fe772a15ed07864ea427337516a95e63caae);
+    // oraclize_setProof(proofType_TLSNotary | proofStorage_IPFS);
   }
 
   function escrow() payable {
-
+    activate();
   }
 
   // Checks the % of progress in the goal commitment
@@ -43,10 +43,11 @@ contract Goal {
     if(this.balance >= amount) state = State.Active;
     }
   }
-
-  function updateSteps(uint _currentSteps) {
+  function __callback(uint myid ,uint _currentSteps, uint proof) {
+    //  if (msg.sender != oraclize_cbAddress()) throw;
     currentSteps = _currentSteps;
-    if (state == State.Active && (currentSteps >= initialSteps + goalSteps) && now < completionDate) {
+    //if (state == State.Active && (currentSteps >= initialSteps + goalSteps) && now < completionDate) {
+    if (state == State.Active && (currentSteps >= initialSteps + goalSteps)) {
       state = State.Achieved;
       bool sentOwner = ownerAddress.send(this.balance);
       /*escrow.cancel(); // I receive my money back!*/
